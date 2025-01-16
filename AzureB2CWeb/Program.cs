@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(options =>
         options.ClientId = ClientID;
         options.ClientSecret = ClientSecret;
         options.ResponseType = "code";
+        options.Scope.Add(ClientID);
         options.SaveTokens = true;
         //options.TokenValidationParameters = new TokenValidationParameters()
         //{

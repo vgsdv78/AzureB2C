@@ -1,5 +1,8 @@
 using System.Diagnostics;
 using AzureB2CWeb.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureB2CWeb.Controllers
@@ -19,6 +22,29 @@ namespace AzureB2CWeb.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult SignIn()
+        {
+            var scheme = OpenIdConnectDefaults.AuthenticationScheme;
+            var redirectUrl=Url.ActionContext.HttpContext.Request.Scheme + 
+                "://" + Url.ActionContext.HttpContext.Request.Host;
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl,
+            }, scheme);
+
+
+        }
+
+        public IActionResult SignOut()
+        {
+            var scheme = OpenIdConnectDefaults.AuthenticationScheme;
+            return SignOut(new AuthenticationProperties(), CookieAuthenticationDefaults.AuthenticationScheme, scheme);
+        }
+        public IActionResult EditProfile()
         {
             return View();
         }

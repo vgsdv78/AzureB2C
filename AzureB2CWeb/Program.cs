@@ -24,7 +24,8 @@ builder.Services.AddRazorPages();
 string? AzureADB2CHostName = builder.Configuration.GetValue<string>("AzureB2C:Instance");
 string? Tenant = builder.Configuration.GetValue<string>("AzureB2C:Domain");
 string? ClientID = builder.Configuration.GetValue<string>("AzureB2C:ClientId"); ;
-string? PolicySignUpSignIn = builder.Configuration.GetValue<string>("AzureB2C:B2C_1_susi"); ;
+string? ClientSecret = builder.Configuration.GetValue<string>("AzureB2C:ClientSecret"); ;
+string? PolicySignUpSignIn = builder.Configuration.GetValue<string>("AzureB2C:SignUpSignInPolicyId"); ;
 string AuthorityBase = $"{AzureADB2CHostName}/{Tenant}";
 string AuthoritySignInSignUp = $"{AuthorityBase}/{PolicySignUpSignIn}/v2.0";
 
@@ -38,12 +39,13 @@ builder.Services.AddAuthentication(options =>
         options.SignInScheme=CookieAuthenticationDefaults.AuthenticationScheme;
         options.Authority = AuthoritySignInSignUp;
         options.ClientId = ClientID;
+        options.ClientSecret = ClientSecret;
         options.ResponseType = "code";
         options.SaveTokens = true;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            NameClaimType = ""
-        };
+        //options.TokenValidationParameters = new TokenValidationParameters()
+        //{
+        //    NameClaimType = ""
+        //};
     })
 
 ;

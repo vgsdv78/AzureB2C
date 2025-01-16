@@ -8,7 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureB2C"));
+    .AddMicrosoftIdentityWebApp(option => {
+        builder.Configuration.Bind("AzureB2C", option);
+
+        option.Events.OnSignedOutCallbackRedirect = context =>
+        {
+            context.Response.Redirect("/");
+            context.HandleResponse();
+            return Task.CompletedTask;
+        };
+    });
 
 var app = builder.Build();
 

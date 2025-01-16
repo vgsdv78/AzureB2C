@@ -43,10 +43,10 @@ builder.Services.AddAuthentication(options =>
         options.ResponseType = "code";
         options.Scope.Add(ClientID);
         options.SaveTokens = true;
-        //options.TokenValidationParameters = new TokenValidationParameters()
-        //{
-        //    NameClaimType = ""
-        //};
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+        };
     })
 
 ;

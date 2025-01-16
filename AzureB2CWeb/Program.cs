@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,14 @@ builder.Services.AddRazorPages();
 //            return Task.CompletedTask;
 //        };
 //    });
+
+string? AzureADB2CHostName = builder.Configuration.GetValue<string>("AzureB2C:Instance");
+string? Tenant = builder.Configuration.GetValue<string>("AzureB2C:Domain");
+string? ClientID = builder.Configuration.GetValue<string>("AzureB2C:ClientId"); ;
+string? PolicySignUpSignIn = builder.Configuration.GetValue<string>("AzureB2C:B2C_1_susi"); ;
+string AuthorityBase = $"{AzureADB2CHostName}/{Tenant}";
+string AuthoritySignInSignUp = $"{AuthorityBase}/{PolicySignUpSignIn}/v2.0";
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -26,7 +35,15 @@ builder.Services.AddAuthentication(options =>
 })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => { 
-
+        options.SignInScheme=CookieAuthenticationDefaults.AuthenticationScheme;
+        options.Authority = AuthoritySignInSignUp;
+        options.ClientId = ClientID;
+        options.ResponseType = "code";
+        options.SaveTokens = true;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            NameClaimType = ""
+        };
     })
 
 ;

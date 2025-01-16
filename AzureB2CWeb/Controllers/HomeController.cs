@@ -46,7 +46,10 @@ namespace AzureB2CWeb.Controllers
         }
         public IActionResult EditProfile()
         {
-            return View();
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            }, "B2C_1_edit");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

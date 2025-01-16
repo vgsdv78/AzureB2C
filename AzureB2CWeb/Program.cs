@@ -26,8 +26,10 @@ string? Tenant = builder.Configuration.GetValue<string>("AzureB2C:Domain");
 string? ClientID = builder.Configuration.GetValue<string>("AzureB2C:ClientId"); ;
 string? ClientSecret = builder.Configuration.GetValue<string>("AzureB2C:ClientSecret"); ;
 string? PolicySignUpSignIn = builder.Configuration.GetValue<string>("AzureB2C:SignUpSignInPolicyId"); ;
+string? EditProfilePolicy = builder.Configuration.GetValue<string>("AzureB2C:EditProfilePolicyId"); ;
 string AuthorityBase = $"{AzureADB2CHostName}/{Tenant}";
 string AuthoritySignInSignUp = $"{AuthorityBase}/{PolicySignUpSignIn}/v2.0";
+string AuthorityEdit = $"{AuthorityBase}/{EditProfilePolicy}/v2.0";
 
 builder.Services.AddAuthentication(options =>
 {
@@ -48,6 +50,7 @@ builder.Services.AddAuthentication(options =>
             NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
         };
     })
+    .AddOpenIdConnect("B2C_1_edit", GetOpenIDConnectEditPolicyOptions("B2C_1_edit"))
 
 ;
 
@@ -74,3 +77,20 @@ app.MapControllerRoute(
 app.MapRazorPages().WithStaticAssets();
 
 app.Run();
+
+
+Action<OpenIdConnectOptions> GetOpenIDConnectEditPolicyOptions(string policy) => options =>
+{
+    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.Authority = AuthorityEdit;
+    options.ClientId = ClientID;
+    options.ClientSecret = ClientSecret;
+    options.ResponseType = "code";
+    options.Scope.Add(ClientID);
+    options.CallbackPath = "/signin-oidc-"+policy;
+    options.SaveTokens = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+    };
+};

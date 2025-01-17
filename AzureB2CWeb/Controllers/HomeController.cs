@@ -28,7 +28,7 @@ namespace AzureB2CWeb.Controllers
 
         public IActionResult SignIn()
         {
-            var scheme = OpenIdConnectDefaults.AuthenticationScheme;
+            var scheme = "B2C_1_susi";
             var redirectUrl=Url.ActionContext.HttpContext.Request.Scheme + 
                 "://" + Url.ActionContext.HttpContext.Request.Host;
             return Challenge(new AuthenticationProperties
@@ -41,7 +41,7 @@ namespace AzureB2CWeb.Controllers
 
         public IActionResult SignOut()
         {
-            var scheme = OpenIdConnectDefaults.AuthenticationScheme;
+            var scheme = "B2C_1_susi";
             return SignOut(new AuthenticationProperties(), CookieAuthenticationDefaults.AuthenticationScheme, scheme);
         }
         public IActionResult EditProfile()

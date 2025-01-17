@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => { 
+    .AddOpenIdConnect("B2C_1_susi", options => { 
         options.SignInScheme=CookieAuthenticationDefaults.AuthenticationScheme;
         options.Authority = AuthoritySignInSignUp;
         options.ClientId = ClientID;

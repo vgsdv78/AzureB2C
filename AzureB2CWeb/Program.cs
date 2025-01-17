@@ -34,7 +34,7 @@ string AuthorityEdit = $"{AuthorityBase}/{EditProfilePolicy}/v2.0";
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = "B2C_1_susi";
 })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddOpenIdConnect("B2C_1_susi", options => { 

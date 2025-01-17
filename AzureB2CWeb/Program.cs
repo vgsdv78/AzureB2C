@@ -87,10 +87,28 @@ Action<OpenIdConnectOptions> GetOpenIDConnectEditPolicyOptions(string policy) =>
     options.ClientSecret = ClientSecret;
     options.ResponseType = "code";
     options.Scope.Add(ClientID);
-    options.CallbackPath = "/signin-oidc-"+policy;
+    options.CallbackPath = "/signin-oidc-" + policy;
     options.SaveTokens = true;
     options.TokenValidationParameters = new TokenValidationParameters()
     {
         NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+    };
+
+    options.Events = new OpenIdConnectEvents
+    {
+        OnMessageReceived = context =>
+        {
+            if (!string.IsNullOrEmpty(context.ProtocolMessage.Error) &&
+            !string.IsNullOrEmpty(context.ProtocolMessage.ErrorDescription))
+            {
+                if (context.ProtocolMessage.Error.Contains("access_denied"))
+                {
+                    context.HandleResponse();
+                    context.Response.Redirect("/");
+                }
+
+            }
+            return Task.FromResult(0);
+        }
     };
 };

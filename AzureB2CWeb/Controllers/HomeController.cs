@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web;
 
 namespace AzureB2CWeb.Controllers
 {
@@ -14,9 +15,12 @@ namespace AzureB2CWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private IHttpClientFactory _httpClientFactory;
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        private readonly ITokenAcquisition _tokenAcquisition;
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory
+            ,ITokenAcquisition tokenAcquisition)
         {
             _logger = logger;
+            _tokenAcquisition = tokenAcquisition;
             _httpClientFactory = httpClientFactory;
         }
 
@@ -70,7 +74,9 @@ namespace AzureB2CWeb.Controllers
         public async Task<IActionResult> APICall()
         {
             var client = _httpClientFactory.CreateClient();
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            //var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var accessToken = await _tokenAcquisition
+                .GetAccessTokenForUserAsync(new[] { "https://dotnetmasterycoding.onmicrosoft.com/sampleapi/fullaccess" });
             var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44323/WeatherForecast");
             request.Headers.Authorization = 
                 new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, accessToken);

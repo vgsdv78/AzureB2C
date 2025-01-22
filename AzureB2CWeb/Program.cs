@@ -40,7 +40,9 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             context.HandleResponse();
             return Task.CompletedTask;
         };
-    });
+    })
+    .EnableTokenAcquisitionToCallDownstreamApi(new[] { "https://dotnetmasterycoding.onmicrosoft.com/sampleapi/fullaccess" })
+    .AddInMemoryTokenCaches();
 
 //string? AzureADB2CHostName = builder.Configuration.GetValue<string>("AzureB2C:Instance");
 //string? Tenant = builder.Configuration.GetValue<string>("AzureB2C:Domain");

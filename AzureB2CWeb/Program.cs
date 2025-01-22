@@ -31,7 +31,7 @@ string? EditProfilePolicy = builder.Configuration.GetValue<string>("AzureB2C:Edi
 string AuthorityBase = $"{AzureADB2CHostName}/{Tenant}";
 string AuthoritySignInSignUp = $"{AuthorityBase}/{PolicySignUpSignIn}/v2.0";
 string AuthorityEdit = $"{AuthorityBase}/{EditProfilePolicy}/v2.0";
-
+string Scope = "https://dotnetmasterycoding.onmicrosoft.com/sampleapi";
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(options =>
         options.ClientId = ClientID;
         options.ClientSecret = ClientSecret;
         options.ResponseType = "code";
-        options.Scope.Add(ClientID);
+        options.Scope.Add(Scope);
         options.SaveTokens = true;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
@@ -87,7 +87,7 @@ Action<OpenIdConnectOptions> GetOpenIDConnectEditPolicyOptions(string policy) =>
     options.ClientId = ClientID;
     options.ClientSecret = ClientSecret;
     options.ResponseType = "code";
-    options.Scope.Add(ClientID);
+    options.Scope.Add(Scope);
     options.CallbackPath = "/signin-oidc-" + policy;
     options.SaveTokens = true;
     options.TokenValidationParameters = new TokenValidationParameters()

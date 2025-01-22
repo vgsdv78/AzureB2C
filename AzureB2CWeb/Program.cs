@@ -31,7 +31,7 @@ string? EditProfilePolicy = builder.Configuration.GetValue<string>("AzureB2C:Edi
 string AuthorityBase = $"{AzureADB2CHostName}/{Tenant}";
 string AuthoritySignInSignUp = $"{AuthorityBase}/{PolicySignUpSignIn}/v2.0";
 string AuthorityEdit = $"{AuthorityBase}/{EditProfilePolicy}/v2.0";
-string Scope = "https://dotnetmasterycoding.onmicrosoft.com/sampleapi";
+string Scope = "https://dotnetmasterycoding.onmicrosoft.com/sampleapi/fullaccess";
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

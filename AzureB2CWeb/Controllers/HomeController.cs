@@ -1,7 +1,9 @@
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using AzureB2CWeb.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,9 +60,10 @@ namespace AzureB2CWeb.Controllers
         public async Task<IActionResult> APICall()
         {
             var client = _httpClientFactory.CreateClient();
-
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
             var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44323/WeatherForecast");
-
+            request.Headers.Authorization = 
+                new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, accessToken);
             var response = await client.SendAsync(request);
 
             if(response.StatusCode!= System.Net.HttpStatusCode.OK)

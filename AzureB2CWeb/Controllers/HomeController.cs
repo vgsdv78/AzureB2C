@@ -77,7 +77,7 @@ namespace AzureB2CWeb.Controllers
             //var accessToken = await HttpContext.GetTokenAsync("access_token");
             var accessToken = await _tokenAcquisition
                 .GetAccessTokenForUserAsync(new[] { "https://dotnetmasterycoding.onmicrosoft.com/sampleapi/fullaccess" });
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44323/WeatherForecast");
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://demoapib2c.azurewebsites.net/WeatherForecast");
             request.Headers.Authorization = 
                 new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, accessToken);
             var response = await client.SendAsync(request);

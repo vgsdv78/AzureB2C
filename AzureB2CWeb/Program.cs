@@ -57,14 +57,16 @@ builder.Services.AddAuthentication(options =>
             {
 
                 string? role = opt.Principal.FindFirstValue("extension_Role");
-
-                var claims = new List<Claim>
+                if (!string.IsNullOrEmpty(role))
                 {
-                new Claim(ClaimTypes.Role, role)
-                };
+                    var claims = new List<Claim>
+                    {
+                    new Claim(ClaimTypes.Role, role)
+                    };
 
-                var appIdentity = new ClaimsIdentity(claims);
-                opt.Principal.AddIdentity(appIdentity);
+                    var appIdentity = new ClaimsIdentity(claims);
+                    opt.Principal.AddIdentity(appIdentity);
+                }
             }
         };
     }).AddOpenIdConnect("B2C_1_edit", GetOpenIDConnectEditPolicyOptions("B2C_1_edit"))

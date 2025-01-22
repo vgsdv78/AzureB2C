@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace DemoAPI.Controllers
 {
     [ApiController]
     [Authorize]
+    [RequiredScope("fullaccess")]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {

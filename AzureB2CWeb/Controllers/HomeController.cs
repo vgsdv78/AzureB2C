@@ -30,6 +30,16 @@ namespace AzureB2CWeb.Controllers
         {
             return View();
         }
+        [Authorize(Roles ="homeowner")]
+        public IActionResult HomeOwner()
+        {
+            return View();
+        }
+        [Authorize(Roles = "customer")]
+        public IActionResult Customer()
+        {
+            return View();
+        }
 
         public IActionResult SignIn()
         {

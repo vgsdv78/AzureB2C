@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,20 +39,35 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = "B2C_1_susi";
 })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddOpenIdConnect("B2C_1_susi", options => { 
-        options.SignInScheme=CookieAuthenticationDefaults.AuthenticationScheme;
-        options.Authority = AuthoritySignInSignUp;
-        options.ClientId = ClientID;
-        options.ClientSecret = ClientSecret;
-        options.ResponseType = "code";
-        options.Scope.Add(Scope);
-        options.SaveTokens = true;
-        options.TokenValidationParameters = new TokenValidationParameters()
+    .AddOpenIdConnect("B2C_1_susi", options => {
+    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.Authority = AuthoritySignInSignUp;
+    options.ClientId = ClientID;
+    options.ClientSecret = ClientSecret;
+    options.ResponseType = "code";
+    options.Scope.Add(Scope);
+    options.SaveTokens = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+    };
+        options.Events = new OpenIdConnectEvents
         {
-            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+            OnTokenValidated = async opt =>
+            {
+
+                string? role = opt.Principal.FindFirstValue("extension_Role");
+
+                var claims = new List<Claim>
+                {
+                new Claim(ClaimTypes.Role, role)
+                };
+
+                var appIdentity = new ClaimsIdentity(claims);
+                opt.Principal.AddIdentity(appIdentity);
+            }
         };
-    })
-    .AddOpenIdConnect("B2C_1_edit", GetOpenIDConnectEditPolicyOptions("B2C_1_edit"))
+    }).AddOpenIdConnect("B2C_1_edit", GetOpenIDConnectEditPolicyOptions("B2C_1_edit"))
 
 ;
 

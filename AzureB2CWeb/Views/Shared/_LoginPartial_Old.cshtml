@@ -4,6 +4,7 @@
 @if (User.Identity?.IsAuthenticated == true)
 {
     <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-text">Hello, @User.Claims.FirstOrDefault(c=>c.Type.Contains("givenname"))?.Value</li>
         <li class="navbar-text">
             <a class="nav-link text-dark" asp-area="MicrosoftIdentity"
                asp-controller="Account" asp-action="EditProfile">Edit Profile</a>

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureB2CWeb", "AzureB2CWeb\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoAPI", "DemoAPI\DemoAPI.csproj", "{D01D8E52-091C-4CD8-8428-792F2B90D428}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureB2CWasm", "AzureB2CWasm\AzureB2CWasm.csproj", "{FFA826B0-AE14-4653-9AEB-7F45E5949FBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D01D8E52-091C-4CD8-8428-792F2B90D428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01D8E52-091C-4CD8-8428-792F2B90D428}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D01D8E52-091C-4CD8-8428-792F2B90D428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFA826B0-AE14-4653-9AEB-7F45E5949FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFA826B0-AE14-4653-9AEB-7F45E5949FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFA826B0-AE14-4653-9AEB-7F45E5949FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFA826B0-AE14-4653-9AEB-7F45E5949FBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

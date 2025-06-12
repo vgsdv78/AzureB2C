@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,26 +16,26 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         option.Events = new OpenIdConnectEvents
         {
             OnTokenValidated = async opt =>
-            {
+                    {
 
-                string? role = opt.Principal.FindFirstValue("extension_Role");
-                if (!string.IsNullOrEmpty(role))
-                {
-                    var claims = new List<Claim>
-                            {
+                        string? role = opt.Principal.FindFirstValue("extension_Role");
+                        if (!string.IsNullOrEmpty(role))
+                        {
+                            var claims = new List<Claim>
+                                    {
                             new Claim(ClaimTypes.Role, role)
-                            };
+                                    };
 
-                    var appIdentity = new ClaimsIdentity(claims);
-                    opt.Principal.AddIdentity(appIdentity);
+                            var appIdentity = new ClaimsIdentity(claims);
+                            opt.Principal.AddIdentity(appIdentity);
+                        }
+                    },
+            OnSignedOutCallbackRedirect = context =>
+                {
+                    context.Response.Redirect("/");
+                    context.HandleResponse();
+                    return Task.CompletedTask;
                 }
-            }
-        };
-        option.Events.OnSignedOutCallbackRedirect = context =>
-        {
-            context.Response.Redirect("/");
-            context.HandleResponse();
-            return Task.CompletedTask;
         };
     })
     .EnableTokenAcquisitionToCallDownstreamApi(new[] { "https://dotnetmasterycoding.onmicrosoft.com/sampleapi/fullaccess" })

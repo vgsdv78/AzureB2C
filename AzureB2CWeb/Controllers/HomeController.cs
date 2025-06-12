@@ -1,13 +1,12 @@
-using System.Diagnostics;
-using System.Net.Http.Headers;
 using AzureB2CWeb.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
+using System.Diagnostics;
+using System.Net.Http.Headers;
 
 namespace AzureB2CWeb.Controllers
 {
@@ -17,7 +16,7 @@ namespace AzureB2CWeb.Controllers
         private IHttpClientFactory _httpClientFactory;
         private readonly ITokenAcquisition _tokenAcquisition;
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory
-            ,ITokenAcquisition tokenAcquisition)
+            , ITokenAcquisition tokenAcquisition)
         {
             _logger = logger;
             _tokenAcquisition = tokenAcquisition;
@@ -34,7 +33,7 @@ namespace AzureB2CWeb.Controllers
         {
             return View();
         }
-        [Authorize(Roles ="homeowner")]
+        [Authorize(Roles = "homeowner")]
         public IActionResult HomeOwner()
         {
             return View();
@@ -48,7 +47,7 @@ namespace AzureB2CWeb.Controllers
         public IActionResult SignIn()
         {
             var scheme = "B2C_1_susi";
-            var redirectUrl=Url.ActionContext.HttpContext.Request.Scheme + 
+            var redirectUrl = Url.ActionContext.HttpContext.Request.Scheme +
                 "://" + Url.ActionContext.HttpContext.Request.Host;
             return Challenge(new AuthenticationProperties
             {
@@ -78,16 +77,16 @@ namespace AzureB2CWeb.Controllers
             var accessToken = await _tokenAcquisition
                 .GetAccessTokenForUserAsync(new[] { "https://dotnetmasterycoding.onmicrosoft.com/sampleapi/fullaccess" });
             var request = new HttpRequestMessage(HttpMethod.Get, "https://demoapib2c.azurewebsites.net/WeatherForecast");
-            request.Headers.Authorization = 
+            request.Headers.Authorization =
                 new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, accessToken);
             var response = await client.SendAsync(request);
 
-            if(response.StatusCode!= System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 //error
             }
 
-            return View("APICall",await response.Content.ReadAsStringAsync());
+            return View("APICall", await response.Content.ReadAsStringAsync());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
